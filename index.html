@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Palmeiras Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom scrollbar for better UX */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e6f0e6;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #006437;
+      border-radius: 10px;
+      border: 2px solid #e6f0e6;
+    }
+  </style>
+</head>
+<body class="bg-white text-green-900 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-green-800 text-white py-6 shadow-md select-none">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-3xl font-extrabold tracking-widest">PALMEIRAS STORE</h1>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+
+    <!-- História -->
+    <section id="historia" class="mb-12 max-w-3xl mx-auto text-center">
+      <h2 class="text-4xl font-bold mb-4 border-b-4 border-green-700 inline-block pb-1">Nossa História</h2>
+      <p class="text-green-900 text-lg leading-relaxed">
+        Fundado em 26 de agosto de 1914, a Sociedade Esportiva Palmeiras é um dos maiores e mais tradicionais clubes do Brasil. Com sede na cidade de São Paulo, o Verdão conquistou o coração de milhões de torcedores ao redor do mundo através de suas inúmeras conquistas nacionais e internacionais. Bicampeão da Copa Libertadores da América (1999 e 2020), campeão mundial de clubes (1951) e detentor de múltiplos títulos brasileiros, o Palmeiras é símbolo de garra, tradição e paixão pelo futebol.
+
+Nossa loja oficial oferece produtos exclusivos para você demonstrar seu amor pelo Verdão. Desde camisas oficiais até acessórios únicos, tudo com a qualidade e autenticidade que o torcedor palmeirense merece.
+      </p>
+    </section>
+
+    <!-- Categorias -->
+    <section id="categorias" class="mb-8 max-w-4xl mx-auto">
+      <h3 class="text-2xl font-semibold mb-4 border-b border-green-700 pb-1">Categorias</h3>
+      <nav class="flex flex-wrap justify-center gap-4">
+        <!-- Buttons dinamicos via JS -->
+      </nav>
+    </section>
+
+    <!-- Produtos -->
+    <section id="produtos" class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Cards dinamicos via JS -->
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-green-800 text-white py-4 text-center select-none">
+    &copy; 2024 Palmeiras Store - Todos os direitos reservados
+  </footer>
+
+  <script>
+    // Dados dos produtos (imagens .jpg fictícias, URLs geradas via placeholder com verde)
+    const produtos = [
+    { nome: 'Camisa Oficial 2024', categoria: 'Camisa', img: './camisa1.jpg' },
+    { nome: 'Calça Esportiva Verde', categoria: 'Calça', img: './calça1.jpg' },
+    { nome: 'Blusa de Frio Palmeiras', categoria: 'Blusa de Frio', img: './blusa1.jpg' },
+    { nome: 'Copo Oficial Palmeiras', categoria: 'Copo', img: './copo.jpg' },
+    { nome: 'Bola Oficial Palmeiras', categoria: 'Bola', img: './bola.jpg' },
+    { nome: 'Boné Palmeiras', categoria: 'Acessórios', img: './bone.jpg' },
+    { nome: 'Meias Palmeiras', categoria: 'Acessórios', img: './meia.jpg' },
+    { nome: 'Mochila Palmeiras', categoria: 'Acessórios', img: './mochila.jpg' },
+    { nome: 'Jaqueta Palmeiras', categoria: 'Blusa de Frio', img: './blusa2.jpg' },
+    { nome: 'Short Palmeiras', categoria: 'Calça', img: './calça2.jpg' },
+    { nome: 'Camisa Retrô Palmeiras', categoria: 'Camisa', img: './camisa2.jpg' },
+    { nome: 'Pulseira Palmeiras', categoria: 'Acessórios', img: './pulseira.jpg' }
+    ];
+
+    // Elementos DOM
+    const categoriasContainer = document.querySelector('#categorias nav');
+    const produtosContainer = document.getElementById('produtos');
+
+    // Obter categorias únicas e ordenar
+    const categorias = [...new Set(produtos.map(p => p.categoria))].sort();
+    categorias.unshift('Todos'); // Adiciona opção "Todos" no início
+
+    // Função para criar botões de categoria
+    function criarBotoesCategorias() {
+      categorias.forEach(categoria => {
+        const btn = document.createElement('button');
+        btn.textContent = categoria;
+        btn.className = 'px-4 py-2 rounded-md border border-green-700 text-green-900 font-semibold hover:bg-green-700 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-green-600';
+        btn.setAttribute('data-categoria', categoria);
+        if(categoria === 'Todos') btn.classList.add('bg-green-700', 'text-white');
+        btn.addEventListener('click', () => {
+          // Remove destaque do botão ativo
+          categoriasContainer.querySelectorAll('button').forEach(b => b.classList.remove('bg-green-700', 'text-white'));
+          btn.classList.add('bg-green-700', 'text-white');
+          filtrarProdutos(categoria);
+          // Scroll suave para produtos
+          produtosContainer.scrollIntoView({behavior: 'smooth'});
+        });
+        categoriasContainer.appendChild(btn);
+      });
+    }
+
+    // Função para renderizar produtos filtrados
+    function filtrarProdutos(categoria) {
+      produtosContainer.innerHTML = '';
+      let filtrados = categoria === 'Todos' ? produtos : produtos.filter(p => p.categoria === categoria);
+      if(filtrados.length === 0) {
+        produtosContainer.innerHTML = `<p class="col-span-full text-center text-green-900 font-semibold text-lg">Nenhum produto disponível nesta categoria.</p>`;
+        return;
+      }
+      filtrados.forEach(produto => {
+        const card = document.createElement('article');
+        card.className = 'bg-white border border-green-200 rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col select-none';
+        card.innerHTML = `
+          <img src="${produto.img}" alt="Foto do produto ${produto.nome}" loading="lazy" class="rounded-t-lg object-contain h-48 w-full bg-green-50" />
+          <div class="p-4 flex flex-col flex-grow">
+            <h4 class="text-green-900 font-semibold text-lg mb-2">${produto.nome}</h4>
+            <button aria-label="Adicionar ${produto.nome}" class="mt-auto bg-green-700 text-white py-2 rounded-md font-semibold hover:bg-green-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-600">Adicionar</button>
+          </div>
+        `;
+        // Evento do botão adicionar
+        card.querySelector('button').addEventListener('click', () => {
+          alert(`Produto "${produto.nome}" adicionado ao carrinho!`);
+        });
+        produtosContainer.appendChild(card);
+      });
+    }
+
+    // Inicialização
+    criarBotoesCategorias();
+    filtrarProdutos('Todos');
+  </script>
+</body>
+</html>
